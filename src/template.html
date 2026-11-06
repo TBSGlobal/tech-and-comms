@@ -331,6 +331,33 @@ section{position:relative}
 }
 
 
+/* register your school */
+.reg{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(28px,5vw,64px);align-items:start}
+.reg>*{min-width:0}
+.reg-copy{display:grid;gap:16px;align-content:start}
+.reg-copy .h2 .serif{display:block;font-family:var(--f-serif);color:var(--blue)}
+.reg-steps{list-style:none;margin:10px 0 0;padding:0;display:grid}
+.reg-steps li{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.reg-steps li:last-child{border-bottom:1px solid var(--line)}
+.reg-steps b{width:44px;height:44px;border-radius:50%;background:var(--navy);color:var(--white);display:grid;place-items:center;font-family:var(--f-display);font-weight:400}
+.reg-steps span{color:var(--muted)}
+.reg-steps strong{color:var(--ink)}
+.reg-form,.reg-done{background:var(--white);border:1px solid var(--line);border-radius:22px;padding:clamp(20px,3.5vw,34px);display:grid;gap:14px;box-shadow:0 30px 60px -44px rgba(19,24,56,.5)}
+.reg-form .f2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.reg-form .field input,.reg-form .field select{font-size:1rem;padding:12px 13px;border-radius:10px}
+.reg-form .field input:focus,.reg-form .field select:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.reg-form .field.bad input,.reg-form .field.bad select{border-color:var(--danger)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:.88rem;color:var(--muted);line-height:1.45}
+.consent input{margin-top:3px;width:18px;height:18px;flex:none}
+.consent.bad{color:var(--danger)}
+.reg-bar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:4px}
+.reg-done h3{font-family:var(--f-display);font-weight:400;font-size:clamp(1.4rem,3vw,1.9rem);color:var(--navy);line-height:1.15}
+.reg-done p{color:var(--muted)}
+.reg-done .share{display:flex;gap:10px;flex-wrap:wrap}
+@media (max-width:960px){.reg{grid-template-columns:1fr}}
+@media (max-width:560px){.reg-form .f2{grid-template-columns:1fr}}
+
 /* speakers */
 .speakers{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,2.5vw,28px)}
 .spk{display:grid;gap:12px;min-width:0}
@@ -421,7 +448,8 @@ section{position:relative}
       <a href="#topics">Topics</a>
       <a href="#calendar">Tour calendar</a>
       <a href="#speakers">Speakers</a>
-      <a href="#host" class="cta">Bring it to your campus</a>
+      <a href="#host">Host us</a>
+      <a href="#register" class="cta">Register your school</a>
     </nav>
   </div>
 </header>
@@ -573,6 +601,62 @@ section{position:relative}
     </div>
   </section>
 
+  <section class="sec" id="register" style="padding-top:0">
+    <div class="wrap">
+      <div class="reg">
+        <div class="reg-copy rv">
+          <span class="eyebrow">After Crawford University</span>
+          <h2 class="h2">Register your school. <span class="serif">We'll come to you.</span></h2>
+          <p class="lead">Tell us your university and we'll count you in. Schools with the most registrations go to the top of our list for the next Tech &amp; Comms stop.</p>
+          <ul class="reg-steps">
+            <li><b>1</b><span><strong>Register</strong> with your school and department.</span></li>
+            <li><b>2</b><span><strong>Share the link</strong> in your class and department group chats.</span></li>
+            <li><b>3</b><span><strong>We announce</strong> the next campus on this page and on our socials.</span></li>
+          </ul>
+        </div>
+        <form class="reg-form rv" id="reg-form" novalidate>
+          <div class="f2">
+            <div class="field"><label for="rg-name">Full name</label><input id="rg-name" name="name" autocomplete="name" required maxlength="120"></div>
+            <div class="field"><label for="rg-role">I am a</label>
+              <select id="rg-role" name="role" required>
+                <option value="">Choose one</option>
+                <option>Student</option><option>Student association executive</option><option>Lecturer / staff</option><option>Alumnus / alumna</option><option>Other</option>
+              </select></div>
+          </div>
+          <div class="field"><label for="rg-uni">University / institution</label><input id="rg-uni" name="university" list="rg-unis" required maxlength="160" placeholder="Start typing, e.g. University of Lagos"></div>
+          <div class="f2">
+            <div class="field"><label for="rg-dept">Department</label><input id="rg-dept" name="department" maxlength="120" value="Mass Communication"></div>
+            <div class="field"><label for="rg-level">Level / year</label>
+              <select id="rg-level" name="level"><option value="">Choose</option><option>100L</option><option>200L</option><option>300L</option><option>400L</option><option>500L</option><option>Postgraduate</option><option>Not a student</option></select></div>
+          </div>
+          <div class="f2">
+            <div class="field"><label for="rg-email">Email</label><input id="rg-email" name="email" type="email" autocomplete="email" maxlength="160"></div>
+            <div class="field"><label for="rg-phone">Phone / WhatsApp</label><input id="rg-phone" name="phone" type="tel" autocomplete="tel" maxlength="40"></div>
+          </div>
+          <div class="field"><label for="rg-city">City / state</label><input id="rg-city" name="city" maxlength="80"></div>
+          <div class="field"><label for="rg-msg">Anything we should know? (optional)</label><input id="rg-msg" name="message" maxlength="400" placeholder="e.g. our association can help host"></div>
+          <div class="hp" aria-hidden="true"><label for="rg-web">Leave this empty</label><input id="rg-web" name="website" tabindex="-1" autocomplete="off"></div>
+          <label class="consent" for="rg-consent"><input id="rg-consent" name="consent" type="checkbox" required> I agree that The Comms Boardroom may contact me about Tech &amp; Comms and store these details for that purpose.</label>
+          <div class="reg-bar">
+            <button class="btn" type="submit" id="rg-submit">Register my school <span class="arr" aria-hidden="true">→</span></button>
+            <span class="status" id="rg-status" role="status" aria-live="polite"></span>
+          </div>
+        </form>
+        <div class="reg-done" id="reg-done" hidden>
+          <span class="eyebrow">You're registered</span>
+          <h3 id="reg-done-h">Thank you. Your school is on our list.</h3>
+          <p>Every classmate who registers moves your school up. Share the link in your class group chat.</p>
+          <div class="share">
+            <a class="btn" id="rg-wa" href="#" target="_blank" rel="noopener">Share on WhatsApp</a>
+            <button class="btn ghost" type="button" id="rg-copy">Copy link</button>
+            <button class="btn ghost" type="button" id="rg-again">Register someone else</button>
+          </div>
+        </div>
+      </div>
+      <datalist id="rg-unis">__UNI_OPTIONS__</datalist>
+    </div>
+  </section>
+
   <section class="sec" id="speakers" style="padding-top:0">
     <div class="wrap">
       <div class="sec-head rv">
@@ -677,6 +761,7 @@ section{position:relative}
   site.calendar = site.calendar || []; site.speakers = site.speakers || [];
   site.announcement = site.announcement || {show:false, text:'', link:'', linkText:''};
   site.register = site.register || {url:'', label:'Register'};
+  site.registration = site.registration || {endpoint:'', publicUrl:''};
   site.contacts = site.contacts || {};
   var data = site.calendar;
 
@@ -741,7 +826,7 @@ section{position:relative}
         + (s.note ? '<span class="note">'+esc(s.note)+'</span>' : '') + '</div>'
         + '<i class="chip '+st+'">'+STATUS[st]+'</i></article>';
     });
-    html += '<article class="stop ghost"><div class="date"><span class="tbd">Next?</span></div><div class="info"><h4>Your university could be next</h4><span class="where">Departments and alumni bodies can <a href="#host">request a stop</a>.</span></div></article>';
+    html += '<article class="stop ghost"><div class="date"><span class="tbd">Next?</span></div><div class="info"><h4>Your university could be next</h4><span class="where"><a href="#register">Register your school</a> to bring Tech &amp; Comms to your campus.</span></div></article>';
     $('stops').innerHTML = html;
   }
 
@@ -776,11 +861,61 @@ section{position:relative}
     el.hidden = !(a.show && a.text);
     el.innerHTML = esc(a.text) + (a.link && /^https:\/\//i.test(a.link) ? ' <a href="'+esc(a.link)+'" target="_blank" rel="noopener">'+esc(a.linkText || 'Learn more')+' →</a>' : '');
     var r = site.register, b = $('reg-btn');
-    b.hidden = !(r.url && /^https:\/\//i.test(r.url));
-    if(!b.hidden){ b.href = r.url; b.firstChild.nodeValue = (r.label || 'Register') + ' '; }
+    var ext = r.url && /^https:\/\//i.test(r.url);
+    b.hidden = false;
+    if(ext){ b.href = r.url; b.firstChild.nodeValue = (r.label || 'Register') + ' '; }
+    else { b.href = '#register'; b.removeAttribute('target'); b.firstChild.nodeValue = 'Register your school '; }
   }
   function render(){ renderAnnounce(); renderSpeakers(); renderStamp(); renderContacts(); renderNext(); renderTimeline(); renderStops(); requestAnimationFrame(function(){ requestAnimationFrame(growFills); }); centerNow(); }
   render();
+
+
+  // ---- Register your school (submissions go to the Google Sheet web app in site.registration.endpoint) ----
+  var regForm = $('reg-form'), regStatus = $('rg-status'), regDone = $('reg-done');
+  var REG_URL = (site.registration && site.registration.endpoint) || '';
+  var shareUrl = location.protocol === 'https:' && location.hostname.indexOf('claude') === -1 ? location.origin + location.pathname + '#register' : (site.registration && site.registration.publicUrl) || '';
+  function regVal(id){ return ($(id).value || '').trim(); }
+  function markBad(id, bad){ var f = $(id).closest('.field'); if(f) f.classList.toggle('bad', bad); }
+  regForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    var d = {name:regVal('rg-name'), role:regVal('rg-role'), university:regVal('rg-uni'), department:regVal('rg-dept'), level:regVal('rg-level'),
+      email:regVal('rg-email'), phone:regVal('rg-phone'), city:regVal('rg-city'), message:regVal('rg-msg'), website:regVal('rg-web'),
+      consent:$('rg-consent').checked ? 'Yes' : 'No', page:location.href.split('#')[0]};
+    var emailOk = !d.email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email);
+    markBad('rg-name', !d.name); markBad('rg-role', !d.role); markBad('rg-uni', !d.university); markBad('rg-email', !emailOk);
+    markBad('rg-phone', !d.email && !d.phone);
+    $('rg-consent').closest('.consent').classList.toggle('bad', !$('rg-consent').checked);
+    var msg = !d.name ? 'Enter your full name.' : !d.role ? 'Choose who you are.' : !d.university ? 'Enter your university or institution.'
+      : !emailOk ? 'Check your email address.' : (!d.email && !d.phone) ? 'Add an email or a phone number so we can reach you.'
+      : !$('rg-consent').checked ? 'Tick the consent box so we can store your details.' : '';
+    regStatus.className = 'status' + (msg ? ' err' : '');
+    regStatus.textContent = msg;
+    if(msg) return;
+    if(!REG_URL){ regStatus.className = 'status err'; regStatus.textContent = 'Registration is not switched on yet. Please check back soon.'; return; }
+    var btn = $('rg-submit'); btn.disabled = true; regStatus.textContent = 'Sending…';
+    fetch(REG_URL, {method:'POST', body:JSON.stringify(d)})   // text/plain body: no CORS preflight
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        btn.disabled = false;
+        if(!res || !res.ok) throw new Error((res && res.error) || 'failed');
+        $('reg-done-h').textContent = 'Thank you. ' + d.university + ' is on our list.';
+        var text = 'I just registered ' + d.university + ' for Tech & Comms by The Comms Boardroom. Register so they come to our school next: ' + shareUrl;
+        $('rg-wa').href = 'https://wa.me/?text=' + encodeURIComponent(text);
+        regForm.hidden = true; regDone.hidden = false; regStatus.textContent = '';
+        regDone.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'center'});
+      })
+      .catch(function(){
+        btn.disabled = false;
+        regStatus.className = 'status err';
+        regStatus.textContent = 'Your registration did not go through. Check your connection and try again.';
+      });
+  });
+  $('rg-again').addEventListener('click', function(){ regForm.reset(); $('rg-dept').value = 'Mass Communication'; regDone.hidden = true; regForm.hidden = false; $('rg-name').focus(); });
+  $('rg-copy').addEventListener('click', function(){
+    var b = this;
+    try { navigator.clipboard.writeText(shareUrl).then(function(){ b.textContent = 'Link copied'; setTimeout(function(){ b.textContent = 'Copy link'; }, 1600); }, function(){ b.textContent = shareUrl; }); }
+    catch(err){ b.textContent = shareUrl; }
+  });
 
   $('timeline').addEventListener('click', function(e){
     var a = e.target.closest('[data-stop]'); if(!a) return;

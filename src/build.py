@@ -70,6 +70,8 @@ photos = json.loads((SRC / "photos.json").read_text())
 
 html = html.replace("__SITE_DATA__", json.dumps(site, ensure_ascii=False).replace("<", "\\u003c"))
 html = html.replace("__AST__", AST)
+unis = json.loads((SRC / "universities.json").read_text())
+html = html.replace("__UNI_OPTIONS__", "".join(f'<option value="{H.escape(u)}"></option>' for u in unis))
 for k, v in ICONS.items():
     html = html.replace(f"__I_{k}__", v)
 

@@ -56,5 +56,9 @@
     "email": "info@thecommsboardroom.com",
     "website": "www.thecommsboardroom.com",
     "office": "22, Simpson Street, Ebute-Metta, Lagos"
+  },
+  "registration": {
+    "endpoint": "",
+    "publicUrl": ""
   }
 }
