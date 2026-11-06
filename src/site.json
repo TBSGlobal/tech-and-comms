@@ -58,7 +58,7 @@
     "office": "22, Simpson Street, Ebute-Metta, Lagos"
   },
   "registration": {
-    "endpoint": "",
-    "publicUrl": ""
+    "endpoint": "https://script.google.com/macros/s/AKfycbyCwsBIoHuvo5jcOclf_5rmEqdfFCJmKy6A00zeDm8JDmmjf1PvwVdglb_dUMD_RY0W/exec",
+    "publicUrl": "https://tech-and-comms.vercel.app"
   }
 }
