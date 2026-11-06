@@ -1,6 +1,12 @@
 <title>Tech &amp; Comms Tour</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Tech & Comms: a campus seminar series by The Comms Boardroom bringing real-world PR, media intelligence and personal branding to Mass Communication students.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Tech &amp; Comms by The Comms Boardroom">
+<meta property="og:description" content="Where Communications Meet Technology. A campus seminar series for Mass Communication students. Register your school.">
+<meta property="og:image" content="__OG_IMAGE__">
+<meta property="og:url" content="__SITE_URL__">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Serif+Display:ital@0;1&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700;1,800&display=swap">
@@ -893,21 +899,32 @@ section{position:relative}
     if(msg) return;
     if(!REG_URL){ regStatus.className = 'status err'; regStatus.textContent = 'Registration is not switched on yet. Please check back soon.'; return; }
     var btn = $('rg-submit'); btn.disabled = true; regStatus.textContent = 'Sending…';
-    fetch(REG_URL, {method:'POST', body:JSON.stringify(d)})   // text/plain body: no CORS preflight
-      .then(function(r){ return r.json(); })
-      .then(function(res){
+    fetch(REG_URL, {method:'POST', body:JSON.stringify(d), redirect:'follow'})   // text/plain body: no CORS preflight
+      .then(function(r){ return r.text(); }, function(err){ throw {kind:'network', detail:String(err)}; })
+      .then(function(txt){
+        var res; try { res = JSON.parse(txt); } catch(e){ throw {kind:'not_json', detail:txt.slice(0,300)}; }
+        if(!res || !res.ok) throw {kind:'server', detail:(res && (res.error + (res.detail ? ': ' + res.detail : ''))) || 'unknown'};
         btn.disabled = false;
-        if(!res || !res.ok) throw new Error((res && res.error) || 'failed');
         $('reg-done-h').textContent = 'Thank you. ' + d.university + ' is on our list.';
         var text = 'I just registered ' + d.university + ' for Tech & Comms by The Comms Boardroom. Register so they come to our school next: ' + shareUrl;
         $('rg-wa').href = 'https://wa.me/?text=' + encodeURIComponent(text);
         regForm.hidden = true; regDone.hidden = false; regStatus.textContent = '';
         regDone.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'center'});
       })
-      .catch(function(){
+      .catch(function(err){
         btn.disabled = false;
+        var kind = (err && err.kind) || 'network';
+        // Details for the site owner (open the browser console to see them).
+        var HINT = {
+          network: 'The browser could not read a reply from the Apps Script web app. Usually the deployment is not set to "Who has access: Anyone", the script was never authorised (run setup), or the URL in site.json is not the /exec Web app URL.',
+          not_json: 'The Apps Script URL answered with a web page instead of JSON. Open the URL in a private window: a Google sign-in page means access is not "Anyone"; an error page shows what failed.',
+          server: 'The script ran but reported an error. If it says the spreadsheet was not found, create the script from the sheet (Extensions > Apps Script).'
+        };
+        console.warn('[Tech & Comms registration] ' + kind + ' - ' + HINT[kind] + ' Detail: ' + (err && err.detail));
         regStatus.className = 'status err';
-        regStatus.textContent = 'Your registration did not go through. Check your connection and try again.';
+        regStatus.textContent = kind === 'server'
+          ? 'We could not save your registration (' + String(err.detail).split(':')[0] + '). Please try again in a minute.'
+          : 'We could not reach our registration service just now. Please try again in a minute, or email ' + ((site.contacts && site.contacts.email) || 'us') + '.';
       });
   });
   $('rg-again').addEventListener('click', function(){ regForm.reset(); $('rg-dept').value = 'Mass Communication'; regDone.hidden = true; regForm.hidden = false; $('rg-name').focus(); });
