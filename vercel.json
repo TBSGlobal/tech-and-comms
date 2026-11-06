@@ -1,5 +1,5 @@
 {
-  "buildCommand": "python3 src/build.py && mkdir -p dist && cp index.html dist/index.html",
+  "buildCommand": "python3 src/build.py && mkdir -p dist && cp index.html dist/index.html && cp -r assets dist/assets",
   "outputDirectory": "dist",
   "cleanUrls": true
 }

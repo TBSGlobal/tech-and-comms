@@ -26,3 +26,9 @@ On the published claude.ai version, admins (the owner and editors) open the page
 - Output directory: `dist`
 
 Every commit (for example an edit to `src/site.json` on github.com) rebuilds and redeploys the site.
+
+## Logos
+
+- `assets/tech-and-comms-logo.png` — the Tech & Comms wordmark as supplied.
+- `assets/tech-and-comms-logo-transparent.png` — the same with the background removed, for dark or coloured backgrounds.
+- `assets/og-image.png` — the 1200×630 preview image shown when the site link is shared on WhatsApp, LinkedIn, X and similar.

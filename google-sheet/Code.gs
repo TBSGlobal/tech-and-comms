@@ -15,7 +15,7 @@ const FIELDS = ['name', 'role', 'university', 'department', 'level', 'email', 'p
 /** Run once from the editor: creates the two tabs and their headers. */
 function setup() {
   registrationsSheet_();
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = spreadsheet_();
   let sum = ss.getSheetByName(SUMMARY_NAME);
   if (!sum) sum = ss.insertSheet(SUMMARY_NAME);
   sum.clear();
@@ -37,7 +37,7 @@ function doPost(e) {
     registrationsSheet_().appendRow(row);
     return json_({ ok: true });
   } catch (err) {
-    return json_({ ok: false, error: 'server_error' });
+    return json_({ ok: false, error: 'server_error', detail: String(err && err.message || err) });
   } finally {
     lock.releaseLock();
   }
@@ -48,8 +48,15 @@ function doGet() {
   return json_({ ok: true, service: 'Tech & Comms registrations' });
 }
 
-function registrationsSheet_() {
+/** The sheet this script is attached to (create the script from the sheet: Extensions → Apps Script). */
+function spreadsheet_() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (!ss) throw new Error('spreadsheet not found - create this script from the sheet via Extensions > Apps Script');
+  return ss;
+}
+
+function registrationsSheet_() {
+  const ss = spreadsheet_();
   let sh = ss.getSheetByName(SHEET_NAME);
   if (!sh) sh = ss.insertSheet(SHEET_NAME, 0);
   if (sh.getLastRow() === 0) {

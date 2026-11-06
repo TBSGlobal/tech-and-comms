@@ -70,6 +70,9 @@ photos = json.loads((SRC / "photos.json").read_text())
 
 html = html.replace("__SITE_DATA__", json.dumps(site, ensure_ascii=False).replace("<", "\\u003c"))
 html = html.replace("__AST__", AST)
+site_url = ((site.get("registration") or {}).get("publicUrl") or "").split("#")[0].rstrip("/")
+html = html.replace("__OG_IMAGE__", (site_url + "/assets/og-image.png") if site_url else "assets/og-image.png")
+html = html.replace("__SITE_URL__", site_url or "")
 unis = json.loads((SRC / "universities.json").read_text())
 html = html.replace("__UNI_OPTIONS__", "".join(f'<option value="{H.escape(u)}"></option>' for u in unis))
 for k, v in ICONS.items():
