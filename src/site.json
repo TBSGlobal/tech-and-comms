@@ -1,0 +1,60 @@
+{
+  "calendar": [
+    {
+      "id": "crawford-2026",
+      "university": "Crawford University",
+      "short": "Crawford",
+      "date": "2026-11-26",
+      "status": "confirmed",
+      "venue": "Legacy Hall",
+      "city": "Igbesa, Ogun State",
+      "note": "Open to all Mass Communication students. With the Dept. of Mass Communication and the Crawford University Alumni Association."
+    }
+  ],
+  "speakers": [
+    {
+      "id": "samuel",
+      "name": "Samuel Ogundeji",
+      "role": "Host · Founder, TCBR",
+      "photo": "builtin:samuel",
+      "mystery": false
+    },
+    {
+      "id": "onaopemipo",
+      "name": "Onaopemipo Famori",
+      "role": "Speaker",
+      "photo": "builtin:onaopemipo",
+      "mystery": false
+    },
+    {
+      "id": "gabriel",
+      "name": "Gabriel Ntoka",
+      "role": "Speaker",
+      "photo": "",
+      "mystery": false
+    },
+    {
+      "id": "tba",
+      "name": "",
+      "role": "Speaker",
+      "photo": "",
+      "mystery": true
+    }
+  ],
+  "announcement": {
+    "show": false,
+    "text": "",
+    "link": "",
+    "linkText": ""
+  },
+  "register": {
+    "url": "",
+    "label": "Register"
+  },
+  "contacts": {
+    "phone": "08160122896",
+    "email": "info@thecommsboardroom.com",
+    "website": "www.thecommsboardroom.com",
+    "office": "22, Simpson Street, Ebute-Metta, Lagos"
+  }
+}
