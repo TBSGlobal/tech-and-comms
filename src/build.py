@@ -6,6 +6,7 @@ registration link, contacts), and fills photo slots from photos.json (slots with
 fall back to built-in illustrations). Run: python3 tech-and-comms/src/build.py
 """
 import base64
+import sys
 import html as H
 import json
 import pathlib
@@ -107,5 +108,15 @@ for key, name in [("LOGO_LIGHT", "tcbr-logo-light.png"), ("LOGO", "tcbr-logo.png
     html = html.replace(f"__IMG_{key}__", data_uri(name))
 
 assert "__" not in html.split("<script>")[0].replace("__proto__", ""), [l for l in html.splitlines() if "__" in l][:3]
+# A standalone page (Vercel, any web host) needs its own document shell: without the viewport
+# tag phones render the desktop layout zoomed out. `--artifact` skips it for the claude.ai copy,
+# which adds the same shell itself when published.
+SHELL_HEAD = ('<!doctype html><html lang="en"><head><meta charset="utf-8">'
+              '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">'
+              '<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);'
+              'padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}'
+              'body{margin:0;padding:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body>\n')
+if "--artifact" not in sys.argv:
+    html = SHELL_HEAD + html + "\n</body></html>\n"
 (ROOT / "index.html").write_text(html)
 print("wrote", ROOT / "index.html", len(html), "bytes")
