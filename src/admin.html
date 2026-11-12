@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Tech &amp; Comms Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Montserrat:wght@400;500;600;700;800&display=swap">
+<style>
+/* Utilitarian admin: navy bar, paper ground, white editing rows; same tokens as the public site. */
+:root{
+  --navy:#131838;--navy-2:#222a5a;--blue:#5a7bfe;--blue-soft:#dfe6ff;--yellow:#ffd60a;
+  --paper:#f2f5fc;--white:#fff;--ink:#131838;--muted:#4b537a;--line:#cfd7f0;--ok:#1f8a5b;--danger:#c23a3a;
+  --f-display:"Archivo Black","Arial Black",Arial,sans-serif;--f-body:"Montserrat","Helvetica Neue",Arial,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font:15px/1.55 var(--f-body);min-height:100vh}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:4px}
+.bar{background:var(--navy);color:#fff;position:sticky;top:0;z-index:5;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:12px}
+.bar h1{margin:0;font:400 1.05rem var(--f-display);display:flex;align-items:center;gap:12px}
+.bar h1 img{height:38px;width:auto}
+.bar h1 small{font:800 .64rem var(--f-body);letter-spacing:.2em;text-transform:uppercase;background:var(--yellow);color:var(--navy);padding:3px 8px;border-radius:999px}
+.bar .acts{display:flex;gap:8px;flex-wrap:wrap}
+.btn{font:inherit;font-weight:700;font-size:.9rem;border:2px solid var(--navy);background:var(--navy);color:#fff;padding:10px 18px;border-radius:999px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{background:var(--blue);border-color:var(--blue)}
+.btn.ghost{background:transparent;color:var(--navy)}
+.btn.ghost:hover{color:#fff}
+.bar .btn{border-color:#fff}
+.bar .btn.ghost{color:#fff}
+.btn.small{padding:6px 13px;font-size:.8rem}
+.btn.danger{border-color:var(--danger);color:var(--danger);background:transparent}
+.btn.danger:hover{background:var(--danger);color:#fff}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.eyebrow{font-weight:700;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+h2{font:400 1.3rem var(--f-display);color:var(--navy);margin:0}
+.hint{color:var(--muted);font-size:.9rem;max-width:72ch;margin:0}
+.login{max-width:440px;margin:12vh auto 0;background:#fff;border:1px solid var(--line);border-radius:20px;padding:30px;display:grid;gap:16px}
+.login h2{font-size:1.6rem}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin:24px 0 22px}
+.tabs button{font:inherit;font-weight:700;font-size:.9rem;background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px;color:var(--muted);cursor:pointer}
+.tabs button[aria-selected="true"]{color:var(--navy);border-color:var(--blue)}
+.panel{display:grid;gap:16px;padding-bottom:130px}
+.row{display:grid;grid-template-columns:1.5fr 1fr 1fr .9fr 1.2fr 1fr;gap:10px;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.row.sp{grid-template-columns:88px 1.3fr 1.1fr 1.2fr auto;align-items:end}
+.row.kv{grid-template-columns:1fr}
+.row .full{grid-column:1/-2}
+.row .acts{display:flex;align-items:end;justify-content:flex-end;gap:6px;flex-wrap:wrap}
+.field{display:grid;gap:4px;min-width:0}
+.field label{font-size:.66rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.field input,.field select{font:inherit;font-size:.95rem;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);width:100%;min-width:0}
+.check{display:flex;align-items:center;gap:8px;font-weight:600}
+.check input{width:18px;height:18px}
+.thumb{width:88px;height:100px;border-radius:10px;overflow:hidden;background:var(--blue-soft);display:grid;place-items:center;font-size:.7rem;color:var(--muted);font-weight:700;text-align:center}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.save{position:fixed;left:0;right:0;bottom:0;z-index:4;background:#fff;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.save .wrap{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding-block:12px}
+.status{font-size:.9rem;font-weight:600}
+.status.err{color:var(--danger)}.status.ok{color:var(--ok)}
+.stats{display:grid;gap:14px}
+.big{font:400 3rem/1 var(--f-display);color:var(--blue);font-variant-numeric:tabular-nums}
+table{border-collapse:collapse;width:100%;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line)}
+th{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+td.n{font-variant-numeric:tabular-nums;font-weight:800;text-align:right;width:120px}
+.tbl{overflow-x:auto}
+@media (max-width:960px){.row,.row.sp{grid-template-columns:1fr 1fr}.row .full,.row .acts{grid-column:1/-1}}
+@media (max-width:520px){.row,.row.sp{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header class="bar"><div class="wrap">
+  <h1><img src="__IMG_LOGO_LIGHT__" alt="The Comms Boardroom">Tech &amp; Comms <small>Admin</small></h1>
+  <div class="acts"><a class="btn ghost small" href="/" target="_blank" rel="noopener">View the site</a><button class="btn ghost small" type="button" id="logout" hidden>Sign out</button></div>
+</div></header>
+
+<main class="wrap">
+  <form class="login" id="login" novalidate>
+    <span class="eyebrow">Admin</span>
+    <h2>Sign in to edit the website</h2>
+    <p class="hint">Changes you publish here go live on the Tech &amp; Comms site straight away.</p>
+    <div class="field"><label for="pw">Admin password</label><input id="pw" type="password" autocomplete="current-password" required></div>
+    <button class="btn" type="submit" id="login-btn">Sign in</button>
+    <span class="status" id="login-status" role="status" aria-live="polite"></span>
+  </form>
+
+  <div id="app" hidden>
+    <div class="tabs" role="tablist" aria-label="Admin sections">
+      <button role="tab" type="button" aria-selected="true" data-tab="calendar">Tour calendar</button>
+      <button role="tab" type="button" aria-selected="false" data-tab="speakers">Speakers</button>
+      <button role="tab" type="button" aria-selected="false" data-tab="announce">Announcement &amp; button</button>
+      <button role="tab" type="button" aria-selected="false" data-tab="contacts">Contact details</button>
+      <button role="tab" type="button" aria-selected="false" data-tab="regs">Registrations</button>
+    </div>
+    <div class="panel" id="panel"></div>
+  </div>
+</main>
+
+<div class="save" id="save" hidden><div class="wrap">
+  <button class="btn" type="button" id="publish">Publish changes</button>
+  <button class="btn ghost" type="button" id="reset">Discard changes</button>
+  <span class="status" id="status" role="status" aria-live="polite">No unpublished changes.</span>
+</div></div>
+
+<script type="application/json" id="defaults">__DEFAULT_CONTENT__</script>
+<script type="application/json" id="cfg">__ADMIN_CFG__</script>
+<div hidden id="photo-bank"><img data-key="samuel" src="__IMG_SAMUEL__" alt=""><img data-key="onaopemipo" src="__IMG_ONAOPEMIPO__" alt=""></div>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var CFG = JSON.parse($('cfg').textContent), EP = CFG.endpoint;
+  var DEFAULTS = JSON.parse($('defaults').textContent);
+  var STATUS = {confirmed:'Confirmed', talks:'In talks', planned:'Planned', done:'Completed'};
+  var BUILTIN = {samuel:'Samuel Ogundeji (built-in)', onaopemipo:'Onaopemipo Famori (built-in)'};
+  var pw = '', live = null, draft = null, dirty = false, tab = 'calendar';
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+  function photoSrc(p){ if(!p) return ''; if(p.indexOf('builtin:') === 0){ var im = document.querySelector('#photo-bank img[data-key="'+p.slice(8)+'"]'); return im ? im.src : ''; } return p; }
+  function setDirty(v){ dirty = v; var s = $('status'); s.className = 'status'; s.textContent = v ? 'You have unpublished changes.' : 'No unpublished changes.'; }
+  function post(body){
+    return fetch(EP, {method:'POST', body:JSON.stringify(body), redirect:'follow'}).then(function(r){ return r.text(); }).then(function(t){
+      try { return JSON.parse(t); } catch(e){ return {ok:false, error:'not_json'}; } });
+  }
+  var ERR = {
+    wrong_password:'That password is not right.', locked:'Too many wrong passwords. Wait 15 minutes and try again.',
+    no_admin_password_set:'No admin password is set yet. Add ADMIN_PASSWORD in Apps Script → Project Settings → Script properties.',
+    not_json:'The Google script answered with a web page. Redeploy it as a new version (Deploy → Manage deployments).',
+    invalid_content:'Something in the content is not valid.', too_large:'The content is too large to save. Shorten some text or remove photo links.',
+    unknown_action:'The Google script is out of date. Paste in the latest Code.gs and deploy a new version.'
+  };
+  function errText(res){ return (ERR[res && res.error] || 'Something went wrong. Check your connection and try again.') + (res && res.detail ? ' (' + res.detail + ')' : ''); }
+
+  // ---- sign in ----
+  try { pw = sessionStorage.getItem('tc-admin-pw') || ''; } catch(e){}
+  function signedIn(){
+    $('login').hidden = true; $('app').hidden = false; $('save').hidden = false; $('logout').hidden = false;
+    $('status').textContent = 'Loading the live content…';
+    fetch(EP + '?action=content', {redirect:'follow'}).then(function(r){ return r.json(); }).then(function(res){
+      live = (res && res.content) ? res.content : clone(DEFAULTS);
+      ['calendar','speakers','announcement','register','contacts'].forEach(function(k){ if(live[k] == null) live[k] = clone(DEFAULTS[k]); });
+      draft = clone(live); setDirty(false); draw();
+    }).catch(function(){ live = clone(DEFAULTS); draft = clone(live); setDirty(false); draw(); $('status').className = 'status err'; $('status').textContent = 'Could not load the live content, showing the built-in copy.'; });
+  }
+  $('login').addEventListener('submit', function(e){
+    e.preventDefault();
+    var v = $('pw').value; if(!v){ $('login-status').className = 'status err'; $('login-status').textContent = 'Enter the admin password.'; return; }
+    if(!EP){ $('login-status').className = 'status err'; $('login-status').textContent = 'The Google script link is missing from site.json.'; return; }
+    $('login-btn').disabled = true; $('login-status').className = 'status'; $('login-status').textContent = 'Checking…';
+    post({action:'login', password:v}).then(function(res){
+      $('login-btn').disabled = false;
+      if(!res.ok){ $('login-status').className = 'status err'; $('login-status').textContent = errText(res); return; }
+      pw = v; try { sessionStorage.setItem('tc-admin-pw', v); } catch(e){}
+      $('login-status').textContent = ''; signedIn();
+    }, function(){ $('login-btn').disabled = false; $('login-status').className = 'status err'; $('login-status').textContent = 'Could not reach the Google script. Check your connection.'; });
+  });
+  $('logout').addEventListener('click', function(){ try { sessionStorage.removeItem('tc-admin-pw'); } catch(e){} location.reload(); });
+  if(pw){ post({action:'login', password:pw}).then(function(res){ if(res.ok) signedIn(); else { try { sessionStorage.removeItem('tc-admin-pw'); } catch(e){} pw=''; } }, function(){}); }
+
+  // ---- editing ----
+  function inp(id, label, path, val, type, cls){ return '<div class="field'+(cls||'')+'"><label for="'+id+'">'+label+'</label><input id="'+id+'" type="'+(type||'text')+'" data-path="'+path+'" value="'+esc(val)+'"></div>'; }
+  function sel(id, label, path, val, opts){ return '<div class="field"><label for="'+id+'">'+label+'</label><select id="'+id+'" data-path="'+path+'">'+Object.keys(opts).map(function(k){ return '<option value="'+esc(k)+'"'+(val===k?' selected':'')+'>'+esc(opts[k])+'</option>'; }).join('')+'</select></div>'; }
+  var TABS = {
+    calendar: function(){
+      var h = '<h2>Tour calendar</h2><p class="hint">The countdown on the home screen points at the next stop with a date that has not passed. Leave the date empty for a stop that is not scheduled yet.</p>';
+      draft.calendar.forEach(function(s, i){
+        h += '<div class="row">' + inp('u'+i,'University','calendar.'+i+'.university',s.university) + inp('sh'+i,'Short name','calendar.'+i+'.short',s.short)
+          + inp('d'+i,'Date','calendar.'+i+'.date',s.date,'date') + sel('s'+i,'Status','calendar.'+i+'.status',s.status,STATUS)
+          + inp('v'+i,'Venue','calendar.'+i+'.venue',s.venue) + inp('c'+i,'City / State','calendar.'+i+'.city',s.city)
+          + inp('n'+i,'Note (optional)','calendar.'+i+'.note',s.note,'text',' full')
+          + '<div class="acts"><button class="btn danger small" type="button" data-del="calendar.'+i+'">Remove</button></div></div>';
+      });
+      return h + '<div><button class="btn ghost" type="button" data-add="calendar">Add a university</button></div>';
+    },
+    speakers: function(){
+      var h = '<h2>Speakers</h2><p class="hint">Shown in this order. Tick "Revealing soon" for a mystery card. For a new photo, upload it somewhere public (for example the repo\'s assets folder, or a Google Drive image set to "Anyone with the link") and paste the image link.</p>';
+      draft.speakers.forEach(function(s, i){
+        var src = photoSrc(s.photo), isBuiltin = s.photo && s.photo.indexOf('builtin:') === 0;
+        var choice = !s.photo ? '' : isBuiltin ? s.photo : 'link';
+        var opts = {'':'No photo'}; Object.keys(BUILTIN).forEach(function(k){ opts['builtin:'+k] = BUILTIN[k]; }); opts.link = 'Image link…';
+        h += '<div class="row sp"><div class="thumb">' + (src ? '<img src="'+esc(src)+'" alt="">' : 'No photo') + '</div>'
+          + inp('sn'+i,'Name','speakers.'+i+'.name',s.name) + inp('sr'+i,'Role','speakers.'+i+'.role',s.role)
+          + '<div class="field"><label for="sp'+i+'">Photo</label><select id="sp'+i+'" data-photo="'+i+'">'+Object.keys(opts).map(function(k){ return '<option value="'+esc(k)+'"'+(choice===k?' selected':'')+'>'+esc(opts[k])+'</option>'; }).join('')+'</select>'
+          + (choice === 'link' ? '<input id="spu'+i+'" type="url" data-path="speakers.'+i+'.photo" value="'+esc(s.photo)+'" placeholder="https://…" style="margin-top:6px">' : '') + '</div>'
+          + '<div class="acts"><label class="check"><input type="checkbox" data-path="speakers.'+i+'.mystery"'+(s.mystery?' checked':'')+'>Revealing soon</label>'
+          + (i>0 ? '<button class="btn ghost small" type="button" data-up="'+i+'">Move up</button>' : '')
+          + '<button class="btn danger small" type="button" data-del="speakers.'+i+'">Remove</button></div></div>';
+      });
+      return h + '<div><button class="btn ghost" type="button" data-add="speakers">Add a speaker</button></div>';
+    },
+    announce: function(){
+      var a = draft.announcement, r = draft.register;
+      return '<h2>Announcement bar</h2><p class="hint">A yellow bar across the top of the site, for short news such as "Seats are almost full".</p>'
+        + '<div class="row kv"><label class="check"><input type="checkbox" data-path="announcement.show"'+(a.show?' checked':'')+'>Show the announcement bar</label>'
+        + inp('at','Message','announcement.text',a.text) + inp('al','Link (optional, starts with https://)','announcement.link',a.link,'url') + inp('alt','Link text','announcement.linkText',a.linkText) + '</div>'
+        + '<h2 style="margin-top:12px">Button next to the countdown</h2><p class="hint">Leave the link empty to keep "Register your school", which opens the registration form on the site. Add a link only to send people somewhere else.</p>'
+        + '<div class="row kv">' + inp('ru','Link (optional, starts with https://)','register.url',r.url,'url') + inp('rl','Button text when a link is set','register.label',r.label) + '</div>';
+    },
+    contacts: function(){
+      var c = draft.contacts;
+      return '<h2>Contact details</h2><p class="hint">Shown in the "Bring Tech &amp; Comms to your campus" section.</p><div class="row kv">'
+        + inp('kp','Phone','contacts.phone',c.phone) + inp('ke','Email','contacts.email',c.email,'email') + inp('kw','Website','contacts.website',c.website) + inp('ko','Office address','contacts.office',c.office) + '</div>';
+    },
+    regs: function(){
+      setTimeout(loadStats, 0);
+      return '<h2>Registrations</h2><p class="hint">Read-only summary from the Registrations tab of your Google Sheet. Open the sheet to see every entry.</p><div class="stats" id="stats">Loading…</div><div><button class="btn ghost" type="button" id="refresh">Refresh</button></div>';
+    }
+  };
+  var BLANK = {
+    calendar: function(){ return {id:'s'+Date.now().toString(36), university:'', short:'', date:'', status:'planned', venue:'', city:'', note:''}; },
+    speakers: function(){ return {id:'p'+Date.now().toString(36), name:'', role:'Speaker', photo:'', mystery:false}; }
+  };
+  function loadStats(){
+    var box = $('stats'); if(!box) return; box.textContent = 'Loading…';
+    post({action:'stats', password:pw}).then(function(res){
+      if(!res.ok){ box.innerHTML = '<span class="status err">'+esc(errText(res))+'</span>'; return; }
+      var s = res.stats;
+      box.innerHTML = '<div><span class="eyebrow">Total registrations</span><div class="big">'+s.total+'</div></div>'
+        + (s.schools.length ? '<div class="tbl"><table><thead><tr><th>University / institution</th><th style="text-align:right">Registrations</th></tr></thead><tbody>'
+        + s.schools.map(function(r){ return '<tr><td>'+esc(r.school)+'</td><td class="n">'+r.count+'</td></tr>'; }).join('') + '</tbody></table></div>' : '<p class="hint">No registrations yet.</p>');
+    }, function(){ box.innerHTML = '<span class="status err">Could not reach the Google script.</span>'; });
+  }
+  function draw(){
+    [].forEach.call(document.querySelectorAll('.tabs [role=tab]'), function(b){ b.setAttribute('aria-selected', b.getAttribute('data-tab') === tab); });
+    $('panel').innerHTML = TABS[tab]();
+    $('save').hidden = tab === 'regs';
+  }
+  function setPath(path, val){ var p = path.split('.'), o = draft; for(var i=0;i<p.length-1;i++) o = o[p[i]]; o[p[p.length-1]] = val; }
+  document.querySelector('.tabs').addEventListener('click', function(e){ var b = e.target.closest('[data-tab]'); if(b){ tab = b.getAttribute('data-tab'); draw(); } });
+  $('panel').addEventListener('input', function(e){ var p = e.target.getAttribute('data-path'); if(p && e.target.type !== 'checkbox'){ setPath(p, e.target.value); setDirty(true); } });
+  $('panel').addEventListener('change', function(e){
+    var p = e.target.getAttribute('data-path');
+    if(p && e.target.type === 'checkbox'){ setPath(p, e.target.checked); setDirty(true); }
+    var ph = e.target.getAttribute('data-photo');
+    if(ph !== null){ var v = e.target.value, sp = draft.speakers[+ph]; sp.photo = v === 'link' ? (sp.photo && sp.photo.indexOf('builtin:') !== 0 ? sp.photo : 'https://') : v; setDirty(true); draw(); }
+  });
+  $('panel').addEventListener('click', function(e){
+    var b;
+    if(e.target.id === 'refresh'){ loadStats(); return; }
+    if((b = e.target.closest('[data-add]'))){ var k = b.getAttribute('data-add'); draft[k].push(BLANK[k]()); setDirty(true); draw(); var rows = document.querySelectorAll('.row'); if(rows.length) rows[rows.length-1].querySelector('input').focus(); return; }
+    if((b = e.target.closest('[data-del]'))){
+      if(!b.getAttribute('data-armed')){ b.setAttribute('data-armed','1'); b.textContent = 'Click again to remove'; return; }
+      var parts = b.getAttribute('data-del').split('.'); draft[parts[0]].splice(+parts[1], 1); setDirty(true); draw(); return;
+    }
+    if((b = e.target.closest('[data-up]'))){ var i = +b.getAttribute('data-up'), a = draft.speakers, t = a[i-1]; a[i-1] = a[i]; a[i] = t; setDirty(true); draw(); }
+  });
+  $('reset').addEventListener('click', function(){ draft = clone(live); setDirty(false); draw(); });
+  function sortCal(list){ return list.slice().sort(function(a,b){ if(!a.date && !b.date) return 0; if(!a.date) return 1; if(!b.date) return -1; return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; }); }
+  function validate(d){
+    if(d.calendar.some(function(s){ return !String(s.university||'').trim(); })) return 'Every stop on the tour calendar needs a university name.';
+    if(d.speakers.some(function(s){ return !s.mystery && !String(s.name||'').trim(); })) return 'Every speaker needs a name, or tick "Revealing soon".';
+    var links = [d.register.url, d.announcement.link].concat(d.speakers.map(function(s){ return s.photo && s.photo.indexOf('builtin:') !== 0 ? s.photo : ''; })).filter(function(u){ return u && u !== 'https://'; });
+    if(links.some(function(u){ return !/^https:\/\/\S+$/i.test(u); })) return 'Links must start with https:// and contain no spaces.';
+    return '';
+  }
+  $('publish').addEventListener('click', function(){
+    draft.speakers.forEach(function(s){ if(s.photo === 'https://') s.photo = ''; });
+    var err = validate(draft), st = $('status');
+    if(err){ st.className = 'status err'; st.textContent = err; return; }
+    draft.calendar = sortCal(draft.calendar);
+    draft.updated = new Date().toISOString();
+    $('publish').disabled = true; st.className = 'status'; st.textContent = 'Publishing…';
+    post({action:'saveContent', password:pw, content:draft}).then(function(res){
+      $('publish').disabled = false;
+      if(!res.ok){ st.className = 'status err'; st.textContent = errText(res); return; }
+      live = clone(draft); dirty = false; draw();
+      st.className = 'status ok'; st.textContent = 'Published. It is live now; visitors see it the next time they open or refresh the site.';
+    }, function(){ $('publish').disabled = false; st.className = 'status err'; st.textContent = 'Could not reach the Google script. Your changes are still here; try again.'; });
+  });
+  window.addEventListener('beforeunload', function(e){ if(dirty){ e.preventDefault(); e.returnValue = ''; } });
+})();
+</script>
+</body></html>

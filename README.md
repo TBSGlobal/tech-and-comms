@@ -32,3 +32,7 @@ Every commit (for example an edit to `src/site.json` on github.com) rebuilds and
 - `assets/tech-and-comms-logo.png` — the Tech & Comms wordmark as supplied.
 - `assets/tech-and-comms-logo-transparent.png` — the same with the background removed, for dark or coloured backgrounds.
 - `assets/og-image.png` — the 1200×630 preview image shown when the site link is shared on WhatsApp, LinkedIn, X and similar.
+
+## Live admin
+
+Edit the site at `/admin` (tech-and-comms.vercel.app/admin). Content is stored by the Google Sheet web app and loaded on every visit, so changes are live without a redeploy. Setup: `google-sheet/README.md` → "Live admin".
