@@ -875,6 +875,21 @@ section{position:relative}
   function render(){ renderAnnounce(); renderSpeakers(); renderStamp(); renderContacts(); renderNext(); renderTimeline(); renderStops(); requestAnimationFrame(function(){ requestAnimationFrame(growFills); }); centerNow(); }
   render();
 
+  // ---- Live content: the admin page (/admin) saves to the Google Sheet web app; load the latest on every visit ----
+  (function(){
+    var ep = site.registration && site.registration.endpoint;
+    if(!ep || !/^https:\/\//.test(ep) || !window.fetch) return;
+    fetch(ep + (ep.indexOf('?') > -1 ? '&' : '?') + 'action=content', {redirect:'follow'})
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if(!res || !res.ok || !res.content) return;
+        ['calendar','speakers','announcement','register','contacts'].forEach(function(k){ if(res.content[k] != null) site[k] = res.content[k]; });
+        data = site.calendar;
+        render();
+      })
+      .catch(function(err){ console.warn('[Tech & Comms] live content not loaded, showing the built-in copy.', err); });
+  })();
+
 
   // ---- Register your school (submissions go to the Google Sheet web app in site.registration.endpoint) ----
   var regForm = $('reg-form'), regStatus = $('rg-status'), regDone = $('reg-done');
@@ -1169,7 +1184,10 @@ section{position:relative}
     if(!isAdmin) $('adm-locked-msg').textContent = 'Open this link while signed in to Claude as the page owner or an editor. Visitors to the public site never see this dashboard.';
     if(isAdmin){ if(!draft){ draft = clone(site); setDirty(false); } drawAdmin(); }
   }
-  function route(){ showAdmin(location.hash === '#admin'); }
+  function route(){
+    if(location.hash === '#admin' && !(window.claude && window.claude.use) && /^https?:$/.test(location.protocol)){ location.replace('/admin'); return; }
+    showAdmin(location.hash === '#admin');
+  }
   window.addEventListener('hashchange', route);
   window.addEventListener('beforeunload', function(e){ if(dirty && !adm.hidden){ e.preventDefault(); e.returnValue = ''; } });
 

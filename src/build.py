@@ -120,3 +120,15 @@ if "--artifact" not in sys.argv:
     html = SHELL_HEAD + html + "\n</body></html>\n"
 (ROOT / "index.html").write_text(html)
 print("wrote", ROOT / "index.html", len(html), "bytes")
+
+# Admin page (/admin): edits the live content stored by the Google Sheet web app.
+admin = (SRC / "admin.html").read_text()
+defaults = {k: site.get(k) for k in ("calendar", "speakers", "announcement", "register", "contacts")}
+cfg = {"endpoint": (site.get("registration") or {}).get("endpoint", "")}
+admin = admin.replace("__DEFAULT_CONTENT__", json.dumps(defaults, ensure_ascii=False).replace("<", "\\u003c"))
+admin = admin.replace("__ADMIN_CFG__", json.dumps(cfg).replace("<", "\\u003c"))
+for key, name in [("LOGO_LIGHT", "tcbr-logo-light.png"), ("SAMUEL", "samuel.jpg"), ("ONAOPEMIPO", "onaopemipo.jpg")]:
+    admin = admin.replace(f"__IMG_{key}__", data_uri(name))
+assert "__DEFAULT_CONTENT__" not in admin and "__IMG_" not in admin
+(ROOT / "admin.html").write_text(admin)
+print("wrote", ROOT / "admin.html", len(admin), "bytes")
