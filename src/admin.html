@@ -118,7 +118,14 @@ td.n{font-variant-numeric:tabular-nums;font-weight:800;text-align:right;width:12
   var pw = '', live = null, draft = null, dirty = false, tab = 'calendar';
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
   function clone(o){ return JSON.parse(JSON.stringify(o)); }
-  function photoSrc(p){ if(!p) return ''; if(p.indexOf('builtin:') === 0){ var im = document.querySelector('#photo-bank img[data-key="'+p.slice(8)+'"]'); return im ? im.src : ''; } return p; }
+  // Google Drive share links (…/file/d/ID/view, …open?id=ID, …uc?id=ID) open a viewer page, not the image.
+  // Turn them into Drive's direct image address. The file must be shared as "Anyone with the link".
+  function driveImg(u){
+    if(!/^https:\/\/(drive|docs)\.google\.com\//i.test(u || '')) return u;
+    var m = u.match(/\/file\/d\/([\w-]{10,})/) || u.match(/[?&]id=([\w-]{10,})/);
+    return m ? 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w1200' : u;
+  }
+  function photoSrc(p){ if(!p) return ''; if(p.indexOf('builtin:') === 0){ var im = document.querySelector('#photo-bank img[data-key="'+p.slice(8)+'"]'); return im ? im.src : ''; } return driveImg(p); }
   function setDirty(v){ dirty = v; var s = $('status'); s.className = 'status'; s.textContent = v ? 'You have unpublished changes.' : 'No unpublished changes.'; }
   function post(body){
     return fetch(EP, {method:'POST', body:JSON.stringify(body), redirect:'follow'}).then(function(r){ return r.text(); }).then(function(t){
@@ -175,12 +182,12 @@ td.n{font-variant-numeric:tabular-nums;font-weight:800;text-align:right;width:12
       return h + '<div><button class="btn ghost" type="button" data-add="calendar">Add a university</button></div>';
     },
     speakers: function(){
-      var h = '<h2>Speakers</h2><p class="hint">Shown in this order. Tick "Revealing soon" for a mystery card. For a new photo, upload it somewhere public (for example the repo\'s assets folder, or a Google Drive image set to "Anyone with the link") and paste the image link.</p>';
+      var h = '<h2>Speakers</h2><p class="hint">Shown in this order. Tick "Revealing soon" for a mystery card. For a new photo, upload it to Google Drive, set sharing to <b>Anyone with the link · Viewer</b>, copy the link and paste it here. Drive links are converted automatically and the preview shows on the left.</p>';
       draft.speakers.forEach(function(s, i){
         var src = photoSrc(s.photo), isBuiltin = s.photo && s.photo.indexOf('builtin:') === 0;
         var choice = !s.photo ? '' : isBuiltin ? s.photo : 'link';
         var opts = {'':'No photo'}; Object.keys(BUILTIN).forEach(function(k){ opts['builtin:'+k] = BUILTIN[k]; }); opts.link = 'Image link…';
-        h += '<div class="row sp"><div class="thumb">' + (src ? '<img src="'+esc(src)+'" alt="">' : 'No photo') + '</div>'
+        h += '<div class="row sp"><div class="thumb">' + (src ? '<img src="'+esc(src)+'" alt="" onerror="this.parentNode.innerHTML=\'Photo not loading: check sharing\'">' : 'No photo') + '</div>'
           + inp('sn'+i,'Name','speakers.'+i+'.name',s.name) + inp('sr'+i,'Role','speakers.'+i+'.role',s.role)
           + '<div class="field"><label for="sp'+i+'">Photo</label><select id="sp'+i+'" data-photo="'+i+'">'+Object.keys(opts).map(function(k){ return '<option value="'+esc(k)+'"'+(choice===k?' selected':'')+'>'+esc(opts[k])+'</option>'; }).join('')+'</select>'
           + (choice === 'link' ? '<input id="spu'+i+'" type="url" data-path="speakers.'+i+'.photo" value="'+esc(s.photo)+'" placeholder="https://…" style="margin-top:6px">' : '') + '</div>'
@@ -233,6 +240,7 @@ td.n{font-variant-numeric:tabular-nums;font-weight:800;text-align:right;width:12
   $('panel').addEventListener('change', function(e){
     var p = e.target.getAttribute('data-path');
     if(p && e.target.type === 'checkbox'){ setPath(p, e.target.checked); setDirty(true); }
+    if(p && /^speakers\.\d+\.photo$/.test(p)){ var conv = driveImg(e.target.value.trim()); setPath(p, conv); setDirty(true); draw(); return; }
     var ph = e.target.getAttribute('data-photo');
     if(ph !== null){ var v = e.target.value, sp = draft.speakers[+ph]; sp.photo = v === 'link' ? (sp.photo && sp.photo.indexOf('builtin:') !== 0 ? sp.photo : 'https://') : v; setDirty(true); draw(); }
   });
