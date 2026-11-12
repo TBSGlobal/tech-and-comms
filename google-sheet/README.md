@@ -41,6 +41,6 @@ The same script also stores the website's content (tour calendar, speakers, anno
 
 Notes
 - The first publish copies the content shown in the admin page into the script. Until then the site shows the copy built from `src/site.json`.
-- Every publish is saved as a row in *Content history* (time + the full content). To undo, tell Claude which version to restore, or copy that row's JSON back through the admin page.
+- Every publish is saved as a row in *Content history* (time + the full content). To undo a change, tell Claude which row to restore.
 - After 10 wrong passwords in 15 minutes, sign-in is locked for 15 minutes for everyone.
 - `src/site.json` is now only the fallback copy. Edit content in the admin page instead.
