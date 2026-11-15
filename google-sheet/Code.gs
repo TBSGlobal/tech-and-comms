@@ -11,11 +11,15 @@
  *  - POST {action:"login", password}       → checks the admin password
  *  - POST {action:"saveContent", password, content} → saves new website content (admin only)
  *  - POST {action:"stats", password}       → registrations per school (admin only)
+ *  - POST {action:"survey", ...}            → adds a row to "Survey" (public, anonymous)
  */
 
 const SHEET_NAME = 'Registrations';
 const SUMMARY_NAME = 'By school';
 const HISTORY_NAME = 'Content history';
+const SURVEY_NAME = 'Survey';
+const SURVEY_FIELDS = ['school', 'level', 'tools', 'heard_mi', 'measure_taught', 'ai_use', 'ai_taught', 'prepared', 'want', 'comment'];
+const SURVEY_HEADERS = ['Timestamp', 'University', 'Level', 'Used a monitoring / listening tool', 'Heard of media intelligence', 'Taught to measure PR value', 'AI use for coursework', 'Taught responsible AI use', 'Job-market readiness (1-5)', 'Want added to curriculum', 'Comment'];
 const HEADERS = ['Timestamp', 'Full name', 'Role', 'University / institution', 'Department', 'Level',
   'Email', 'Phone / WhatsApp', 'City / state', 'Message', 'Consent', 'Page'];
 const FIELDS = ['name', 'role', 'university', 'department', 'level', 'email', 'phone', 'city', 'message', 'consent', 'page'];
@@ -34,6 +38,7 @@ function setup() {
     "=QUERY(" + SHEET_NAME + "!D2:D, \"select D, count(D) where D is not null group by D order by count(D) desc label D 'University', count(D) 'Registrations'\", 0)");
   sum.setFrozenRows(1);
   historySheet_();
+  surveySheet_();
   if (!PropertiesService.getScriptProperties().getProperty('ADMIN_PASSWORD')) {
     Logger.log('Next: Project Settings → Script properties → add ADMIN_PASSWORD.');
   }
@@ -52,6 +57,7 @@ function doPost(e) {
   let d;
   try { d = JSON.parse((e && e.postData && e.postData.contents) || '{}'); }
   catch (err) { return json_({ ok: false, error: 'bad_request' }); }
+  if (d.action === 'survey') return survey_(d);
   if (d.action) return adminAction_(d);
   return register_(d);
 }
@@ -73,6 +79,32 @@ function register_(d) {
   } finally {
     lock.releaseLock();
   }
+}
+
+// ---------- student survey (public, anonymous) ----------
+function survey_(d) {
+  if (d.website) return json_({ ok: true });                  // spam trap
+  if (!clean_(d.level) || !clean_(d.prepared)) return json_({ ok: false, error: 'missing_fields' });
+  const lock = LockService.getScriptLock();
+  lock.waitLock(15000);
+  try {
+    surveySheet_().appendRow([new Date()].concat(SURVEY_FIELDS.map(function (k) { return clean_(d[k]); })));
+    return json_({ ok: true });
+  } catch (err) {
+    return json_({ ok: false, error: 'server_error', detail: String(err && err.message || err) });
+  } finally { lock.releaseLock(); }
+}
+
+function surveySheet_() {
+  const ss = spreadsheet_();
+  let sh = ss.getSheetByName(SURVEY_NAME);
+  if (!sh) {
+    sh = ss.insertSheet(SURVEY_NAME);
+    sh.appendRow(SURVEY_HEADERS);
+    sh.setFrozenRows(1);
+    sh.getRange(1, 1, 1, SURVEY_HEADERS.length).setFontWeight('bold');
+  }
+  return sh;
 }
 
 // ---------- admin (password) ----------

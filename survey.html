@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tech &amp; Comms Student Survey</title>
+<meta name="description" content="A one-minute anonymous survey for Mass Communication students at Tech &amp; Comms.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Montserrat:wght@400;500;600;700;800&display=swap">
+<style>
+/* One-column phone-first form on the paper grid, same tokens as the site. */
+:root{--navy:#131838;--blue:#5a7bfe;--soft:#dfe6ff;--yellow:#ffd60a;--paper:#f2f5fc;--grid:#e2e8f8;--muted:#4b537a;--line:#cfd7f0;--ok:#1f8a5b;--danger:#c23a3a;
+  --f-display:"Archivo Black","Arial Black",Arial,sans-serif;--f-body:"Montserrat","Helvetica Neue",Arial,sans-serif;color-scheme:light}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html,body{margin:0}
+body{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;
+  color:var(--navy);font:16px/1.55 var(--f-body);padding-bottom:env(safe-area-inset-bottom,0px)}
+.wrap{max-width:640px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px))}
+.logo{display:block;height:54px;margin:0 auto 18px}
+.eyebrow{font-weight:700;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);text-align:center}
+h1{font:400 clamp(1.8rem,7vw,2.4rem)/1.05 var(--f-display);text-align:center;margin:8px 0 10px;text-wrap:balance}
+.lead{text-align:center;color:var(--muted);margin:0 0 24px}
+form,.done{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;display:grid;gap:22px}
+fieldset{border:0;margin:0;padding:0;display:grid;gap:10px}
+legend{font-weight:800;font-size:1.02rem;margin-bottom:6px;padding:0}
+legend small{display:block;font-weight:500;font-size:.85rem;color:var(--muted)}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;font-weight:600}
+.opt input{width:20px;height:20px;accent-color:var(--blue);flex:none}
+.opt:has(input:checked){border-color:var(--blue);background:#eef2ff}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.scale .opt{justify-content:center;flex-direction:column;gap:4px;padding:10px 4px;font-weight:800}
+.ends{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted)}
+input[type=text],textarea{font:inherit;width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--navy)}
+textarea{min-height:84px;resize:vertical}
+.btn{font:inherit;font-weight:800;font-size:1rem;border:0;background:var(--navy);color:#fff;padding:15px 22px;border-radius:999px;cursor:pointer;width:100%}
+.btn:hover{background:var(--blue)}.btn[disabled]{opacity:.5}
+.status{font-weight:600;font-size:.92rem;text-align:center}.status.err{color:var(--danger)}
+.note{font-size:.8rem;color:var(--muted);text-align:center}
+.done{text-align:center}
+.done h2{font:400 1.6rem var(--f-display);margin:0}
+.done a{color:var(--blue);font-weight:700}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+</style></head>
+<body><div class="wrap">
+  <img class="logo" src="data:image/png;base64,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" alt="The Comms Boardroom">
+  <p class="eyebrow">Tech &amp; Comms · Student survey</p>
+  <h1>One minute. Nine questions.</h1>
+  <p class="lead">Anonymous. Your answers help us push for a curriculum that prepares Mass Communication students for the industry as it is today.</p>
+
+  <form id="f" novalidate>
+    <fieldset><legend>1. Your university</legend><input type="text" id="school" name="school" maxlength="120" autocomplete="off"></fieldset>
+    <fieldset><legend>2. Your level</legend><div class="opts" data-name="level"><label class="opt"><input type="radio" name="level" value="100L">100L</label><label class="opt"><input type="radio" name="level" value="200L">200L</label><label class="opt"><input type="radio" name="level" value="300L">300L</label><label class="opt"><input type="radio" name="level" value="400L">400L</label><label class="opt"><input type="radio" name="level" value="500L">500L</label><label class="opt"><input type="radio" name="level" value="Postgraduate">Postgraduate</label></div></fieldset>
+    <fieldset><legend>3. Have you ever used a media monitoring or social listening tool?</legend><div class="opts" data-name="tools"><label class="opt"><input type="radio" name="tools" value="Yes">Yes</label><label class="opt"><input type="radio" name="tools" value="No">No</label><label class="opt"><input type="radio" name="tools" value="I&#x27;m not sure what that is">I&#x27;m not sure what that is</label></div></fieldset>
+    <fieldset><legend>4. Before today, had you heard the term "media intelligence"?</legend><div class="opts" data-name="heard_mi"><label class="opt"><input type="radio" name="yn0" value="Yes">Yes</label><label class="opt"><input type="radio" name="yn0" value="No">No</label></div></fieldset>
+    <fieldset><legend>5. Has any of your courses taught you how to measure or prove the value of PR?</legend><div class="opts" data-name="measure_taught"><label class="opt"><input type="radio" name="measure_taught" value="Yes, in depth">Yes, in depth</label><label class="opt"><input type="radio" name="measure_taught" value="Yes, briefly">Yes, briefly</label><label class="opt"><input type="radio" name="measure_taught" value="No">No</label></div></fieldset>
+    <fieldset><legend>6. How often do you use AI tools (for example ChatGPT) for coursework or projects?</legend><div class="opts" data-name="ai_use"><label class="opt"><input type="radio" name="ai_use" value="Often">Often</label><label class="opt"><input type="radio" name="ai_use" value="Sometimes">Sometimes</label><label class="opt"><input type="radio" name="ai_use" value="Never">Never</label></div></fieldset>
+    <fieldset><legend>7. Has any of your courses taught you how to use AI responsibly in communications?</legend><div class="opts" data-name="ai_taught"><label class="opt"><input type="radio" name="yn1" value="Yes">Yes</label><label class="opt"><input type="radio" name="yn1" value="No">No</label></div></fieldset>
+    <fieldset><legend>8. How prepared do you feel for the communications job market?<small>1 = not at all, 5 = very prepared</small></legend>
+      <div class="scale" data-name="prepared"><label class="opt"><input type="radio" name="prepared" value="1">1</label><label class="opt"><input type="radio" name="prepared" value="2">2</label><label class="opt"><input type="radio" name="prepared" value="3">3</label><label class="opt"><input type="radio" name="prepared" value="4">4</label><label class="opt"><input type="radio" name="prepared" value="5">5</label></div><div class="ends"><span>Not at all</span><span>Very prepared</span></div></fieldset>
+    <fieldset><legend>9. What should be added to your curriculum?<small>Choose all that apply</small></legend><div class="opts" data-name="want" data-multi="1"><label class="opt"><input type="checkbox" name="want" value="AI in communications">AI in communications</label><label class="opt"><input type="checkbox" name="want" value="Media monitoring and measurement">Media monitoring and measurement</label><label class="opt"><input type="checkbox" name="want" value="Social listening and data analysis">Social listening and data analysis</label><label class="opt"><input type="checkbox" name="want" value="Personal branding and digital presence">Personal branding and digital presence</label><label class="opt"><input type="checkbox" name="want" value="Research methods with real data">Research methods with real data</label></div></fieldset>
+    <fieldset><legend>Anything else? <small>Optional</small></legend><textarea id="comment" maxlength="500"></textarea></fieldset>
+    <input type="text" id="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+    <button class="btn" type="submit" id="go">Submit</button>
+    <p class="status" id="st" role="status" aria-live="polite"></p>
+    <p class="note">No names, emails or phone numbers are collected.</p>
+  </form>
+
+  <div class="done" id="done" hidden>
+    <p class="eyebrow">Thank you</p>
+    <h2>Your answers are in.</h2>
+    <p>Want Tech &amp; Comms at your school or a friend's school? <a href="/#register">Register a university</a>.</p>
+  </div>
+</div>
+<script type="application/json" id="cfg">{"endpoint": "https://script.google.com/macros/s/AKfycbyCwsBIoHuvo5jcOclf_5rmEqdfFCJmKy6A00zeDm8JDmmjf1PvwVdglb_dUMD_RY0W/exec", "defaultSchool": "Crawford University"}</script>
+<script>
+(function(){
+  var CFG = JSON.parse(document.getElementById('cfg').textContent);
+  var q = new URLSearchParams(location.search);
+  document.getElementById('school').value = q.get('school') || CFG.defaultSchool || '';
+  var f = document.getElementById('f'), st = document.getElementById('st');
+  function val(name){
+    var box = f.querySelector('[data-name="'+name+'"]');
+    var picked = [].map.call(box.querySelectorAll('input:checked'), function(i){ return i.value; });
+    return box.getAttribute('data-multi') ? picked.join('; ') : (picked[0] || '');
+  }
+  f.addEventListener('submit', function(e){
+    e.preventDefault();
+    var d = {action:'survey', school:document.getElementById('school').value.trim(), level:val('level'), tools:val('tools'), heard_mi:val('heard_mi'),
+      measure_taught:val('measure_taught'), ai_use:val('ai_use'), ai_taught:val('ai_taught'), prepared:val('prepared'), want:val('want'),
+      comment:document.getElementById('comment').value.trim(), website:document.getElementById('website').value};
+    var missing = ['level','tools','heard_mi','measure_taught','ai_use','ai_taught','prepared'].filter(function(k){ return !d[k]; });
+    if(missing.length){ st.className = 'status err'; st.textContent = 'Please answer questions 2 to 8.'; return; }
+    if(!CFG.endpoint){ st.className = 'status err'; st.textContent = 'The survey is not switched on yet.'; return; }
+    var b = document.getElementById('go'); b.disabled = true; st.className = 'status'; st.textContent = 'Sending…';
+    fetch(CFG.endpoint, {method:'POST', body:JSON.stringify(d), redirect:'follow'}).then(function(r){ return r.json(); }).then(function(res){
+      if(!res || !res.ok) throw 0;
+      f.hidden = true; document.getElementById('done').hidden = false; window.scrollTo(0, 0);
+    }).catch(function(){ b.disabled = false; st.className = 'status err'; st.textContent = 'That did not go through. Check your connection and tap Submit again.'; });
+  });
+})();
+</script>
+</body></html>

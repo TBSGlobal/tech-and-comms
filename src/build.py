@@ -132,3 +132,29 @@ for key, name in [("LOGO_LIGHT", "tcbr-logo-light.png"), ("SAMUEL", "samuel.jpg"
 assert "__DEFAULT_CONTENT__" not in admin and "__IMG_" not in admin
 (ROOT / "admin.html").write_text(admin)
 print("wrote", ROOT / "admin.html", len(admin), "bytes")
+
+# Student survey (/survey): anonymous, saved to the "Survey" tab by the Google Sheet web app.
+def opts(name, values, kind="radio"):
+    return "".join(f'<label class="opt"><input type="{kind}" name="{name}" value="{H.escape(v)}">{H.escape(v)}</label>' for v in values)
+survey = (SRC / "survey.html").read_text()
+fills = {
+    "__LEVELS__": opts("level", ["100L", "200L", "300L", "400L", "500L", "Postgraduate"]),
+    "__TOOLS__": opts("tools", ["Yes", "No", "I'm not sure what that is"]),
+    "__MEASURE__": opts("measure_taught", ["Yes, in depth", "Yes, briefly", "No"]),
+    "__AIUSE__": opts("ai_use", ["Often", "Sometimes", "Never"]),
+    "__SCALE__": opts("prepared", ["1", "2", "3", "4", "5"]),
+    "__WANT__": opts("want", ["AI in communications", "Media monitoring and measurement", "Social listening and data analysis",
+                              "Personal branding and digital presence", "Research methods with real data"], "checkbox"),
+    "__CFG__": json.dumps({"endpoint": (site.get("registration") or {}).get("endpoint", ""), "defaultSchool": "Crawford University"}).replace("<", "\\u003c"),
+    "__IMG_LOGO__": data_uri("tcbr-logo.png"),
+}
+for k, v in fills.items():
+    survey = survey.replace(k, v)
+survey = survey.replace("__YESNO__", opts("x", ["Yes", "No"]))
+# give each yes/no group its own radio name
+import re
+n = iter(range(100))
+survey = re.sub(r'name="x"', lambda m: 'name="yn%d"' % (next(n) // 2), survey)
+assert "__" not in survey.split("<script")[0], [l for l in survey.splitlines() if "__" in l][:2]
+(ROOT / "survey.html").write_text(survey)
+print("wrote", ROOT / "survey.html", len(survey), "bytes")
