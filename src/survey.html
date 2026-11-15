@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tech &amp; Comms Student Survey</title>
+<meta name="description" content="A one-minute anonymous survey for Mass Communication students at Tech &amp; Comms.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Montserrat:wght@400;500;600;700;800&display=swap">
+<style>
+/* One-column phone-first form on the paper grid, same tokens as the site. */
+:root{--navy:#131838;--blue:#5a7bfe;--soft:#dfe6ff;--yellow:#ffd60a;--paper:#f2f5fc;--grid:#e2e8f8;--muted:#4b537a;--line:#cfd7f0;--ok:#1f8a5b;--danger:#c23a3a;
+  --f-display:"Archivo Black","Arial Black",Arial,sans-serif;--f-body:"Montserrat","Helvetica Neue",Arial,sans-serif;color-scheme:light}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html,body{margin:0}
+body{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;
+  color:var(--navy);font:16px/1.55 var(--f-body);padding-bottom:env(safe-area-inset-bottom,0px)}
+.wrap{max-width:640px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px))}
+.logo{display:block;height:54px;margin:0 auto 18px}
+.eyebrow{font-weight:700;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);text-align:center}
+h1{font:400 clamp(1.8rem,7vw,2.4rem)/1.05 var(--f-display);text-align:center;margin:8px 0 10px;text-wrap:balance}
+.lead{text-align:center;color:var(--muted);margin:0 0 24px}
+form,.done{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;display:grid;gap:22px}
+fieldset{border:0;margin:0;padding:0;display:grid;gap:10px}
+legend{font-weight:800;font-size:1.02rem;margin-bottom:6px;padding:0}
+legend small{display:block;font-weight:500;font-size:.85rem;color:var(--muted)}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;font-weight:600}
+.opt input{width:20px;height:20px;accent-color:var(--blue);flex:none}
+.opt:has(input:checked){border-color:var(--blue);background:#eef2ff}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.scale .opt{justify-content:center;flex-direction:column;gap:4px;padding:10px 4px;font-weight:800}
+.ends{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted)}
+input[type=text],textarea{font:inherit;width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--navy)}
+textarea{min-height:84px;resize:vertical}
+.btn{font:inherit;font-weight:800;font-size:1rem;border:0;background:var(--navy);color:#fff;padding:15px 22px;border-radius:999px;cursor:pointer;width:100%}
+.btn:hover{background:var(--blue)}.btn[disabled]{opacity:.5}
+.status{font-weight:600;font-size:.92rem;text-align:center}.status.err{color:var(--danger)}
+.note{font-size:.8rem;color:var(--muted);text-align:center}
+.done{text-align:center}
+.done h2{font:400 1.6rem var(--f-display);margin:0}
+.done a{color:var(--blue);font-weight:700}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+</style></head>
+<body><div class="wrap">
+  <img class="logo" src="__IMG_LOGO__" alt="The Comms Boardroom">
+  <p class="eyebrow">Tech &amp; Comms · Student survey</p>
+  <h1>One minute. Nine questions.</h1>
+  <p class="lead">Anonymous. Your answers help us push for a curriculum that prepares Mass Communication students for the industry as it is today.</p>
+
+  <form id="f" novalidate>
+    <fieldset><legend>1. Your university</legend><input type="text" id="school" name="school" maxlength="120" autocomplete="off"></fieldset>
+    <fieldset><legend>2. Your level</legend><div class="opts" data-name="level">__LEVELS__</div></fieldset>
+    <fieldset><legend>3. Have you ever used a media monitoring or social listening tool?</legend><div class="opts" data-name="tools">__TOOLS__</div></fieldset>
+    <fieldset><legend>4. Before today, had you heard the term "media intelligence"?</legend><div class="opts" data-name="heard_mi">__YESNO__</div></fieldset>
+    <fieldset><legend>5. Has any of your courses taught you how to measure or prove the value of PR?</legend><div class="opts" data-name="measure_taught">__MEASURE__</div></fieldset>
+    <fieldset><legend>6. How often do you use AI tools (for example ChatGPT) for coursework or projects?</legend><div class="opts" data-name="ai_use">__AIUSE__</div></fieldset>
+    <fieldset><legend>7. Has any of your courses taught you how to use AI responsibly in communications?</legend><div class="opts" data-name="ai_taught">__YESNO__</div></fieldset>
+    <fieldset><legend>8. How prepared do you feel for the communications job market?<small>1 = not at all, 5 = very prepared</small></legend>
+      <div class="scale" data-name="prepared">__SCALE__</div><div class="ends"><span>Not at all</span><span>Very prepared</span></div></fieldset>
+    <fieldset><legend>9. What should be added to your curriculum?<small>Choose all that apply</small></legend><div class="opts" data-name="want" data-multi="1">__WANT__</div></fieldset>
+    <fieldset><legend>Anything else? <small>Optional</small></legend><textarea id="comment" maxlength="500"></textarea></fieldset>
+    <input type="text" id="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+    <button class="btn" type="submit" id="go">Submit</button>
+    <p class="status" id="st" role="status" aria-live="polite"></p>
+    <p class="note">No names, emails or phone numbers are collected.</p>
+  </form>
+
+  <div class="done" id="done" hidden>
+    <p class="eyebrow">Thank you</p>
+    <h2>Your answers are in.</h2>
+    <p>Want Tech &amp; Comms at your school or a friend's school? <a href="/#register">Register a university</a>.</p>
+  </div>
+</div>
+<script type="application/json" id="cfg">__CFG__</script>
+<script>
+(function(){
+  var CFG = JSON.parse(document.getElementById('cfg').textContent);
+  var q = new URLSearchParams(location.search);
+  document.getElementById('school').value = q.get('school') || CFG.defaultSchool || '';
+  var f = document.getElementById('f'), st = document.getElementById('st');
+  function val(name){
+    var box = f.querySelector('[data-name="'+name+'"]');
+    var picked = [].map.call(box.querySelectorAll('input:checked'), function(i){ return i.value; });
+    return box.getAttribute('data-multi') ? picked.join('; ') : (picked[0] || '');
+  }
+  f.addEventListener('submit', function(e){
+    e.preventDefault();
+    var d = {action:'survey', school:document.getElementById('school').value.trim(), level:val('level'), tools:val('tools'), heard_mi:val('heard_mi'),
+      measure_taught:val('measure_taught'), ai_use:val('ai_use'), ai_taught:val('ai_taught'), prepared:val('prepared'), want:val('want'),
+      comment:document.getElementById('comment').value.trim(), website:document.getElementById('website').value};
+    var missing = ['level','tools','heard_mi','measure_taught','ai_use','ai_taught','prepared'].filter(function(k){ return !d[k]; });
+    if(missing.length){ st.className = 'status err'; st.textContent = 'Please answer questions 2 to 8.'; return; }
+    if(!CFG.endpoint){ st.className = 'status err'; st.textContent = 'The survey is not switched on yet.'; return; }
+    var b = document.getElementById('go'); b.disabled = true; st.className = 'status'; st.textContent = 'Sending…';
+    fetch(CFG.endpoint, {method:'POST', body:JSON.stringify(d), redirect:'follow'}).then(function(r){ return r.json(); }).then(function(res){
+      if(!res || !res.ok) throw 0;
+      f.hidden = true; document.getElementById('done').hidden = false; window.scrollTo(0, 0);
+    }).catch(function(){ b.disabled = false; st.className = 'status err'; st.textContent = 'That did not go through. Check your connection and tap Submit again.'; });
+  });
+})();
+</script>
+</body></html>

@@ -44,3 +44,11 @@ Notes
 - Every publish is saved as a row in *Content history* (time + the full content). To undo a change, tell Claude which row to restore.
 - After 10 wrong passwords in 15 minutes, sign-in is locked for 15 minutes for everyone.
 - `src/site.json` is now only the fallback copy. Edit content in the admin page instead.
+
+## Student survey (tech-and-comms.vercel.app/survey)
+
+Anonymous, nine questions, about one minute. Answers go to a *Survey* tab in this sheet.
+
+1. Paste the latest `Code.gs` into Apps Script (replace everything), save, and run `setup` once. It adds the *Survey* tab.
+2. **Deploy → Manage deployments** → pencil → **Version: New version** → **Deploy**.
+3. Show the QR slide on the hall screen during the event. Add `?school=Name` to the link to pre-fill another university, e.g. `/survey?school=University%20of%20Lagos`.
