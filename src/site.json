@@ -57,6 +57,38 @@
     "website": "www.thecommsboardroom.com",
     "office": "22, Simpson Street, Ebute-Metta, Lagos"
   },
+  "partners": [
+    {
+      "id": "tcbr",
+      "name": "The Comms Boardroom",
+      "role": "Organiser",
+      "logo": "builtin:tcbr"
+    },
+    {
+      "id": "masscomm",
+      "name": "Dept. of Mass Communication",
+      "role": "Crawford University",
+      "logo": "builtin:maco"
+    },
+    {
+      "id": "alumni",
+      "name": "Crawford University Alumni Association",
+      "role": "Unicorn",
+      "logo": "builtin:unicorn"
+    },
+    {
+      "id": "pplus",
+      "name": "P+ Measurement Services",
+      "role": "Sponsor",
+      "logo": "builtin:pplus"
+    },
+    {
+      "id": "zofu",
+      "name": "Zofu.Quest",
+      "role": "Sponsor",
+      "logo": "builtin:zofu"
+    }
+  ],
   "registration": {
     "endpoint": "https://script.google.com/macros/s/AKfycbyCwsBIoHuvo5jcOclf_5rmEqdfFCJmKy6A00zeDm8JDmmjf1PvwVdglb_dUMD_RY0W/exec",
     "publicUrl": "https://tech-and-comms.vercel.app"
