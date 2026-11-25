@@ -104,7 +104,7 @@ else:
     html = html.replace("__PHOTO_BAND__", "")
 
 for key, name in [("LOGO_LIGHT", "tcbr-logo-light.png"), ("LOGO", "tcbr-logo.png"), ("SAMUEL", "samuel.jpg"), ("ONAOPEMIPO", "onaopemipo.jpg"),
-                  ("MACO", "maco.jpg"), ("UNICORN", "unicorn.jpg")]:
+                  ("MACO", "maco.jpg"), ("UNICORN", "unicorn.jpg"), ("PPLUS", "pplus.png"), ("ZOFU", "zofu.png")]:
     html = html.replace(f"__IMG_{key}__", data_uri(name))
 
 assert "__" not in html.split("<script>")[0].replace("__proto__", ""), [l for l in html.splitlines() if "__" in l][:3]
@@ -123,11 +123,12 @@ print("wrote", ROOT / "index.html", len(html), "bytes")
 
 # Admin page (/admin): edits the live content stored by the Google Sheet web app.
 admin = (SRC / "admin.html").read_text()
-defaults = {k: site.get(k) for k in ("calendar", "speakers", "announcement", "register", "contacts")}
+defaults = {k: site.get(k) for k in ("calendar", "speakers", "partners", "announcement", "register", "contacts")}
 cfg = {"endpoint": (site.get("registration") or {}).get("endpoint", "")}
 admin = admin.replace("__DEFAULT_CONTENT__", json.dumps(defaults, ensure_ascii=False).replace("<", "\\u003c"))
 admin = admin.replace("__ADMIN_CFG__", json.dumps(cfg).replace("<", "\\u003c"))
-for key, name in [("LOGO_LIGHT", "tcbr-logo-light.png"), ("SAMUEL", "samuel.jpg"), ("ONAOPEMIPO", "onaopemipo.jpg")]:
+for key, name in [("LOGO_LIGHT", "tcbr-logo-light.png"), ("SAMUEL", "samuel.jpg"), ("ONAOPEMIPO", "onaopemipo.jpg"), ("LOGO", "tcbr-logo.png"),
+                  ("MACO", "maco.jpg"), ("UNICORN", "unicorn.jpg"), ("PPLUS", "pplus.png"), ("ZOFU", "zofu.png")]:
     admin = admin.replace(f"__IMG_{key}__", data_uri(name))
 assert "__DEFAULT_CONTENT__" not in admin and "__IMG_" not in admin
 (ROOT / "admin.html").write_text(admin)

@@ -91,6 +91,7 @@ td.n{font-variant-numeric:tabular-nums;font-weight:800;text-align:right;width:12
     <div class="tabs" role="tablist" aria-label="Admin sections">
       <button role="tab" type="button" aria-selected="true" data-tab="calendar">Tour calendar</button>
       <button role="tab" type="button" aria-selected="false" data-tab="speakers">Speakers</button>
+      <button role="tab" type="button" aria-selected="false" data-tab="partners">Partners</button>
       <button role="tab" type="button" aria-selected="false" data-tab="announce">Announcement &amp; button</button>
       <button role="tab" type="button" aria-selected="false" data-tab="contacts">Contact details</button>
       <button role="tab" type="button" aria-selected="false" data-tab="regs">Registrations</button>
@@ -107,7 +108,7 @@ td.n{font-variant-numeric:tabular-nums;font-weight:800;text-align:right;width:12
 
 <script type="application/json" id="defaults">__DEFAULT_CONTENT__</script>
 <script type="application/json" id="cfg">__ADMIN_CFG__</script>
-<div hidden id="photo-bank"><img data-key="samuel" src="__IMG_SAMUEL__" alt=""><img data-key="onaopemipo" src="__IMG_ONAOPEMIPO__" alt=""></div>
+<div hidden id="photo-bank"><img data-key="samuel" src="__IMG_SAMUEL__" alt=""><img data-key="onaopemipo" src="__IMG_ONAOPEMIPO__" alt=""><img data-key="tcbr" src="__IMG_LOGO__" alt=""><img data-key="maco" src="__IMG_MACO__" alt=""><img data-key="unicorn" src="__IMG_UNICORN__" alt=""><img data-key="pplus" src="__IMG_PPLUS__" alt=""><img data-key="zofu" src="__IMG_ZOFU__" alt=""></div>
 <script>
 (function(){
   var $ = function(id){ return document.getElementById(id); };
@@ -115,6 +116,7 @@ td.n{font-variant-numeric:tabular-nums;font-weight:800;text-align:right;width:12
   var DEFAULTS = JSON.parse($('defaults').textContent);
   var STATUS = {confirmed:'Confirmed', talks:'In talks', planned:'Planned', done:'Completed'};
   var BUILTIN = {samuel:'Samuel Ogundeji (built-in)', onaopemipo:'Onaopemipo Famori (built-in)'};
+  var LOGOS = {tcbr:'The Comms Boardroom (built-in)', maco:'AMACOS crest (built-in)', unicorn:'Unicorn alumni crest (built-in)', pplus:'P+ Measurement (built-in)', zofu:'Zofu (built-in)'};
   var pw = '', live = null, draft = null, dirty = false, tab = 'calendar';
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
   function clone(o){ return JSON.parse(JSON.stringify(o)); }
@@ -147,7 +149,7 @@ td.n{font-variant-numeric:tabular-nums;font-weight:800;text-align:right;width:12
     $('status').textContent = 'Loading the live content…';
     fetch(EP + '?action=content', {redirect:'follow'}).then(function(r){ return r.json(); }).then(function(res){
       live = (res && res.content) ? res.content : clone(DEFAULTS);
-      ['calendar','speakers','announcement','register','contacts'].forEach(function(k){ if(live[k] == null) live[k] = clone(DEFAULTS[k]); });
+      ['calendar','speakers','partners','announcement','register','contacts'].forEach(function(k){ if(live[k] == null) live[k] = clone(DEFAULTS[k]); });
       draft = clone(live); setDirty(false); draw();
     }).catch(function(){ live = clone(DEFAULTS); draft = clone(live); setDirty(false); draw(); $('status').className = 'status err'; $('status').textContent = 'Could not load the live content, showing the built-in copy.'; });
   }
@@ -197,6 +199,21 @@ td.n{font-variant-numeric:tabular-nums;font-weight:800;text-align:right;width:12
       });
       return h + '<div><button class="btn ghost" type="button" data-add="speakers">Add a speaker</button></div>';
     },
+    partners: function(){
+      var h = '<h2>Partners &amp; sponsors</h2><p class="hint">Shown in this order in the partnership section of the site. The second line appears under the name, for example Organiser, Sponsor or Crawford University. For a new logo, upload it to Google Drive, set sharing to <b>Anyone with the link · Viewer</b> and paste the link. A logo with a white or transparent background looks best.</p>';
+      draft.partners.forEach(function(p, i){
+        var src = photoSrc(p.logo), isBuiltin = p.logo && p.logo.indexOf('builtin:') === 0;
+        var choice = !p.logo ? '' : isBuiltin ? p.logo : 'link';
+        var opts = {'':'No logo (shows the first letter)'}; Object.keys(LOGOS).forEach(function(k){ opts['builtin:'+k] = LOGOS[k]; }); opts.link = 'Image link…';
+        h += '<div class="row sp"><div class="thumb">' + (src ? '<img src="'+esc(src)+'" alt="" style="object-fit:contain;background:#fff" onerror="this.parentNode.innerHTML=\'Logo not loading: check sharing\'">' : 'No logo') + '</div>'
+          + inp('pn'+i,'Name','partners.'+i+'.name',p.name) + inp('pr'+i,'Second line (role)','partners.'+i+'.role',p.role)
+          + '<div class="field"><label for="pl'+i+'">Logo</label><select id="pl'+i+'" data-logo="'+i+'">'+Object.keys(opts).map(function(k){ return '<option value="'+esc(k)+'"'+(choice===k?' selected':'')+'>'+esc(opts[k])+'</option>'; }).join('')+'</select>'
+          + (choice === 'link' ? '<input id="plu'+i+'" type="url" data-path="partners.'+i+'.logo" value="'+esc(p.logo)+'" placeholder="https://…" style="margin-top:6px">' : '') + '</div>'
+          + '<div class="acts">' + (i ? '<button class="btn ghost small" type="button" data-up-partner="'+i+'">Move up</button>' : '')
+          + '<button class="btn danger small" type="button" data-del="partners.'+i+'">Remove</button></div></div>';
+      });
+      return h + '<div><button class="btn ghost" type="button" data-add="partners">Add a partner</button></div>';
+    },
     announce: function(){
       var a = draft.announcement, r = draft.register;
       return '<h2>Announcement bar</h2><p class="hint">A yellow bar across the top of the site, for short news such as "Seats are almost full".</p>'
@@ -217,7 +234,8 @@ td.n{font-variant-numeric:tabular-nums;font-weight:800;text-align:right;width:12
   };
   var BLANK = {
     calendar: function(){ return {id:'s'+Date.now().toString(36), university:'', short:'', date:'', status:'planned', venue:'', city:'', note:''}; },
-    speakers: function(){ return {id:'p'+Date.now().toString(36), name:'', role:'Speaker', photo:'', mystery:false}; }
+    speakers: function(){ return {id:'p'+Date.now().toString(36), name:'', role:'Speaker', photo:'', mystery:false}; },
+    partners: function(){ return {id:'pt'+Date.now().toString(36), name:'', role:'Partner', logo:''}; }
   };
   function loadStats(){
     var box = $('stats'); if(!box) return; box.textContent = 'Loading…';
@@ -240,6 +258,9 @@ td.n{font-variant-numeric:tabular-nums;font-weight:800;text-align:right;width:12
   $('panel').addEventListener('change', function(e){
     var p = e.target.getAttribute('data-path');
     if(p && e.target.type === 'checkbox'){ setPath(p, e.target.checked); setDirty(true); }
+    if(p && /^partners\.\d+\.logo$/.test(p)){ setPath(p, driveImg(e.target.value.trim())); setDirty(true); draw(); return; }
+    var lg = e.target.getAttribute('data-logo');
+    if(lg !== null){ var lv = e.target.value, pt = draft.partners[+lg]; pt.logo = lv === 'link' ? (pt.logo && pt.logo.indexOf('builtin:') !== 0 ? pt.logo : 'https://') : lv; setDirty(true); draw(); return; }
     if(p && /^speakers\.\d+\.photo$/.test(p)){ var conv = driveImg(e.target.value.trim()); setPath(p, conv); setDirty(true); draw(); return; }
     var ph = e.target.getAttribute('data-photo');
     if(ph !== null){ var v = e.target.value, sp = draft.speakers[+ph]; sp.photo = v === 'link' ? (sp.photo && sp.photo.indexOf('builtin:') !== 0 ? sp.photo : 'https://') : v; setDirty(true); draw(); }
@@ -252,6 +273,7 @@ td.n{font-variant-numeric:tabular-nums;font-weight:800;text-align:right;width:12
       if(!b.getAttribute('data-armed')){ b.setAttribute('data-armed','1'); b.textContent = 'Click again to remove'; return; }
       var parts = b.getAttribute('data-del').split('.'); draft[parts[0]].splice(+parts[1], 1); setDirty(true); draw(); return;
     }
+    if((b = e.target.closest('[data-up-partner]'))){ var j = +b.getAttribute('data-up-partner'), q = draft.partners, s2 = q[j-1]; q[j-1] = q[j]; q[j] = s2; setDirty(true); draw(); return; }
     if((b = e.target.closest('[data-up]'))){ var i = +b.getAttribute('data-up'), a = draft.speakers, t = a[i-1]; a[i-1] = a[i]; a[i] = t; setDirty(true); draw(); }
   });
   $('reset').addEventListener('click', function(){ draft = clone(live); setDirty(false); draw(); });
@@ -259,12 +281,14 @@ td.n{font-variant-numeric:tabular-nums;font-weight:800;text-align:right;width:12
   function validate(d){
     if(d.calendar.some(function(s){ return !String(s.university||'').trim(); })) return 'Every stop on the tour calendar needs a university name.';
     if(d.speakers.some(function(s){ return !s.mystery && !String(s.name||'').trim(); })) return 'Every speaker needs a name, or tick "Revealing soon".';
-    var links = [d.register.url, d.announcement.link].concat(d.speakers.map(function(s){ return s.photo && s.photo.indexOf('builtin:') !== 0 ? s.photo : ''; })).filter(function(u){ return u && u !== 'https://'; });
+    if(d.partners.some(function(s){ return !String(s.name||'').trim(); })) return 'Every partner needs a name.';
+    var links = [d.register.url, d.announcement.link].concat(d.speakers.map(function(s){ return s.photo && s.photo.indexOf('builtin:') !== 0 ? s.photo : ''; })).concat(d.partners.map(function(s){ return s.logo && s.logo.indexOf('builtin:') !== 0 ? s.logo : ''; })).filter(function(u){ return u && u !== 'https://'; });
     if(links.some(function(u){ return !/^https:\/\/\S+$/i.test(u); })) return 'Links must start with https:// and contain no spaces.';
     return '';
   }
   $('publish').addEventListener('click', function(){
     draft.speakers.forEach(function(s){ if(s.photo === 'https://') s.photo = ''; });
+    draft.partners.forEach(function(s){ if(s.logo === 'https://') s.logo = ''; });
     var err = validate(draft), st = $('status');
     if(err){ st.className = 'status err'; st.textContent = err; return; }
     draft.calendar = sortCal(draft.calendar);
